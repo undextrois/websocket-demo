@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot with WebSockets</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f4f4f4;
+}
+
+#chatbox {
+    width: 400px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+#messages {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+}
+
+#message-input {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+#send-btn {
+    width: 18%;
+    padding: 10px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#send-btn:hover {
+    background-color: #218838;
+}
+
+    </style>
+</head>
+<body>
+    <div id="chatbox">
+        <div id="messages"></div>
+        <input id="message-input" type="text" placeholder="Type your message...">
+        <button id="send-btn">Send</button>
+    </div>
+   
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    const socket = io.connect('http://127.0.0.1:5000');
+
+    const messages = document.getElementById('messages');
+    const messageInput = document.getElementById('message-input');
+    const sendBtn = document.getElementById('send-btn');
+
+    socket.on('message', function(msg) {
+        const p = document.createElement('p');
+        p.innerText = msg;
+        messages.appendChild(p);
+        messages.scrollTop = messages.scrollHeight;
+    });
+
+    sendBtn.onclick = function() {
+        const msg = messageInput.value;
+        if (msg) {
+            socket.send(msg);
+            messageInput.value = '';
+        }
+    };
+
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendBtn.click();
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
+
