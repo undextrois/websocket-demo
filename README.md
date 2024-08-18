@@ -37,6 +37,7 @@ A simple WebSocket-based chatbot application using Flask and Socket.IO. This pro
 
    ```bash
    python app.py
+4. **Open the index.html into your favorite browser**
 
 ### Instructions to Customize
 
